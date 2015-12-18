@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">MeetingScheduler</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <!--REST server extra texts-->
+    <string name="rest_login_or_password_error">Login or password is incorrect, or an error on the server occurred.</string>
+    <string name="rest_server_not_available">The server is not available: Timeout</string>
+    <string name="data_not_found">Data not found.</string>
+    <string name="result">result</string>
+
+
 </resources>

@@ -1,4 +1,4 @@
-package com.github.skoryupina.meetingscheduler.reciver;
+package com.github.skoryupina.meetingscheduler.receiver;
 
 import android.os.Bundle;
 import android.os.Handler;
