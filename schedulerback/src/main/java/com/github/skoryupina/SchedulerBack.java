@@ -7,15 +7,27 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.*;
 import javax.ejb.Stateless;
 
+
 @Stateless
 @Path("/")
 public class SchedulerBack {
+    @Context
+    private ServletContext context;
+    @Context
+    private HttpServletRequest request;
+    @Context
+    private HttpServletResponse response;
+
     public static ArrayList<Meeting> meetings = new ArrayList<>();
 
     private static final String LOGIN = "login";
@@ -25,6 +37,7 @@ public class SchedulerBack {
     private static final String RESULT_OK = "[{\"result\":\"OK\"}]";
     private static final String RESULT_ERROR = "[{\"result\":\"Error\"}]";
     private static final String EMPTY_LIST = "[]";
+
     @GET
     @Produces(MediaType.TEXT_HTML + "; charset=UTF-8")
     public String getWelcomePage() {
@@ -79,7 +92,7 @@ public class SchedulerBack {
 
     /***
      * Add meeting to the list of meetings. Params are characteristics of new meeting
-    */
+     */
 
     private void addMeetingToList(String name,
                                   String description,
@@ -155,16 +168,16 @@ public class SchedulerBack {
             + Participant.FIO + "}/{"
             + Participant.POSITION + "}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED + ";charset=UTF-8")
-    public String addParticipant(@PathParam(Participant.LOGIN ) String login,
+    public String addParticipant(@PathParam(Participant.LOGIN) String login,
                                  @PathParam(Participant.PASSWORD) String password,
                                  @PathParam(Meeting.ID) String id,
-                                 @PathParam(Participant.FIO ) String fio,
+                                 @PathParam(Participant.FIO) String fio,
                                  @PathParam(Participant.POSITION) String position) {
         if (LOGIN.equals(login) && PASSWORD.equals(password)) {
             try {
                 fio = URLDecoder.decode(fio, "UTF-8");
                 position = URLDecoder.decode(position, "UTF-8");
-                Participant participant = new Participant(fio,position);
+                Participant participant = new Participant(fio, position);
                 Meeting m = findMeetingById(Integer.parseInt(id));
                 if (m != null) {
                     meetings.remove(m);
@@ -197,9 +210,9 @@ public class SchedulerBack {
     @GET
     @Path("/getDescription")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-    public String getDescription(@PathParam(Participant.LOGIN ) String login,
-                                 @PathParam(Participant.PASSWORD) String password,
-                                 @PathParam(Meeting.ID) String id) {
+    public String getDescription(@QueryParam(Participant.LOGIN) String login,
+                                 @QueryParam(Participant.PASSWORD) String password,
+                                 @QueryParam(Meeting.ID) String id) {
         String description;
         if (LOGIN.equals(login) && PASSWORD.equals(password)) {
             try {
@@ -212,6 +225,82 @@ public class SchedulerBack {
             } catch (Exception e) {
                 e.printStackTrace();
                 return RESULT_ERROR;
+            }
+        } else {
+            return RESULT_ERROR;
+        }
+    }
+
+    //4. Cancel meeting
+    @DELETE
+    @Path("/cancelMeeting")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public String cancelMeeting() {
+        int id = Integer.parseInt((request.getHeader(Meeting.ID)));
+        String result = RESULT_ERROR;
+        try {
+            if (LOGIN.equals(request.getHeader(Participant.LOGIN)) && PASSWORD.equals(request.getHeader(Participant.PASSWORD))) {
+                Meeting m = findMeetingById(id);
+                if (m != null) {
+                    meetings.remove(m);
+                    result = RESULT_OK;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    //5.Create meeting: client option
+    @POST
+    @Path("/androidCreateMeeting/{"
+            + Participant.LOGIN + "}/{"
+            + Participant.PASSWORD + "}/{"
+            + Meeting.NAME + "}/{"
+            + Meeting.DESCRIPTION + "}/{"
+            + Meeting.STARTDATE + "}/{"
+            + Meeting.ENDDATE + "}/{"
+            + Meeting.PRIORITY + "}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public String androidCreateMeeting(@PathParam(Meeting.NAME) String name,
+                              @PathParam(Meeting.DESCRIPTION ) String description,
+                              @PathParam(Meeting.STARTDATE ) String startdate,
+                              @PathParam(Meeting.ENDDATE) String enddate,
+                              @PathParam(Meeting.PRIORITY ) String priority,
+                              @PathParam(Participant.LOGIN) String login,
+                              @PathParam(Participant.PASSWORD) String password) {
+        if (LOGIN.equals(login) && PASSWORD.equals(password)) {
+            addMeetingToList(name, description, startdate, enddate, priority);
+            return RESULT_OK;
+        } else {
+            return RESULT_ERROR;
+        }
+    }
+
+    //6.Find meeting by description, including meetings happened
+    @GET
+    @Path("/getMeetingByDescription")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public String findMeetingOnDescription(@QueryParam(Participant.LOGIN) String username,
+                                           @QueryParam(Participant.PASSWORD) String password,
+                                           @QueryParam(Meeting.DESCRIPTION) String description) {
+        if (LOGIN.equals(username) && PASSWORD.equals(password)) {
+            try {
+                description = URLDecoder.decode(description, "UTF-8");
+                ArrayList<Meeting> meetingFound = new ArrayList<>();
+                for (Meeting m : meetings) {
+                    if (m.getDescription().toLowerCase().contains(description.toLowerCase()))
+                        meetingFound.add(m);
+                }
+                if (meetingFound.isEmpty())
+                    return EMPTY_LIST;
+                else
+                    return meetingFound.toString();
+
+            } catch (UnsupportedEncodingException e) {
+                System.out.println(e.getMessage());
+                return EMPTY_LIST;
             }
         } else {
             return RESULT_ERROR;
