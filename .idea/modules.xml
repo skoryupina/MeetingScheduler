@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MeetingScheduler.iml" filepath="$PROJECT_DIR$/MeetingScheduler.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/schedulerback/schedulerback.iml" filepath="$PROJECT_DIR$/schedulerback/schedulerback.iml" />
+      <module fileurl="file://$PROJECT_DIR$/schedulerlibrary/schedulerlibrary.iml" filepath="$PROJECT_DIR$/schedulerlibrary/schedulerlibrary.iml" />
     </modules>
   </component>
 </project>
