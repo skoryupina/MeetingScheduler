@@ -12,8 +12,9 @@ public class Participant {
      * Position of the meeting participant
      */
     private Position position;
-
+    public static final String LOGIN = "login";
     private String login;
+    public static final String PASSWORD = "password";
     private String password;
     /***
      * Types of positions in the project
