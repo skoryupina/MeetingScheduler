@@ -52,5 +52,6 @@
     <orderEntry type="library" exported="" name="aopalliance-repackaged-2.4.0-b10" level="project" />
     <orderEntry type="library" exported="" name="javassist-3.18.1-GA" level="project" />
     <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
+    <orderEntry type="library" exported="" name="grizzly-servlet-webserver-1_9_45" level="project" />
   </component>
 </module>

@@ -1,5 +1,6 @@
 package com.github.skoryupina;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,7 +26,7 @@ public class Meeting {
     private String endDate;
     public static final String PRIORITY = "priority";
     private Priority priority = Priority.PLANNED;
-    private HashSet<Participant> participantsList = new HashSet<>();
+    private ArrayList<Participant> participantsList = new ArrayList<>();
 
 
 
@@ -97,11 +98,11 @@ public class Meeting {
         this.endDate = endDate;
     }
 
-    public HashSet<Participant> getParticipantsList() {
+    public ArrayList<Participant> getParticipantsList() {
         return participantsList;
     }
 
-    public void setParticipantsList(HashSet<Participant> participantsList) {
+    public void setParticipantsList(ArrayList<Participant> participantsList) {
         this.participantsList = participantsList;
     }
 
@@ -120,6 +121,9 @@ public class Meeting {
         return participantsList.remove(participant);
     }
 
+    public int getID() {
+        return id;
+    }
 
     @Override
     public String toString() {

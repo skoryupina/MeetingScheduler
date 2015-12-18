@@ -1,52 +1,37 @@
 package com.github.skoryupina;
 
-/**
- * Created by Ekaterina on 04.11.2015.
- */
 public class Participant {
     /***
      * FIO of the meeting participant
      */
+    public static final String FIO = "fio";
     private String fio;
     /***
      * Position of the meeting participant
      */
-    private Position position;
+    public static final String POSITION = "position";
+    private String position;
     public static final String LOGIN = "login";
     private String login;
     public static final String PASSWORD = "password";
     private String password;
-    /***
-     * Types of positions in the project
-     */
-    public enum Position {
-        CHIEF,
-        COMMERCIAL_MANAGER,
-        PROJECT_MANAGER,
-        BUSINESS_ANALYST,
-        TEAM_LEAD,
-        SENIOR_JAVA_DEVELOPER,
-        SENIOR_QA,
-        FRONT_END_DEVELOPER,
-        ANDROID_DEVELOPER,
-        SUPPORT_ENGINEER
-    }
 
-    public Participant(String fio, Position position, String login) {
+    public Participant(String fio, String position, String login) {
         setFio(fio);
         setPosition(position);
     }
 
-    public Participant() {
-        setFio("Default name");
-        setPosition(Position.ANDROID_DEVELOPER);
+    public Participant(String fio, String position) {
+        setFio(fio);
+
+        setPosition(position);
     }
 
-    public Position getPosition() {
+    public String getPosition() {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(String position) {
         this.position = position;
     }
 
