@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import com.github.skoryupina.Participant;
 
 public class BackgroundReceiver extends BroadcastReceiver {
-    public static final String TASK_CODE = "codeTask";
     public static final String PREFERENCES = BackgroundReceiver.class.getPackage().getName() + "_preferences";
 
     public void onReceive(Context context, Intent intent) {
@@ -18,7 +17,7 @@ public class BackgroundReceiver extends BroadcastReceiver {
             if (preferences.contains(Participant.LOGIN) && preferences.contains(Participant.PASSWORD)) {
                 String login = preferences.getString(Participant.LOGIN, "");
                 String password = preferences.getString(Participant.PASSWORD, "");
-                i.putExtra(TASK_CODE, MeetingRestClientService.TASK_BACKGROUND_RECEIVE);
+                i.putExtra(MeetingRestClientService.TASK_CODE, MeetingRestClientService.TASK_BACKGROUND_RECEIVE);
                 i.putExtra(Participant.LOGIN, login);
                 i.putExtra(Participant.PASSWORD, password);
                 context.startService(i);
