@@ -26,6 +26,7 @@ public class Meeting {
     private String endDate;
     public static final String PRIORITY = "priority";
     private Priority priority = Priority.PLANNED;
+    public static final String PARTICIPANTS = "participants";
     private ArrayList<Participant> participantsList = new ArrayList<>();
 
 
@@ -34,6 +35,7 @@ public class Meeting {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.id = ++autoID;
     }
 
 
@@ -136,9 +138,9 @@ public class Meeting {
 
 
     public String getDetails() {
-        StringBuilder details = new StringBuilder("{" + "\"description\":\"" + description + "\"");
+        StringBuilder details = new StringBuilder("{" + "\""+DESCRIPTION+"\":\"" + description + "\"");
         if (participantsList.size() > 0) {
-            details.append(", \"participants\": [");
+            details.append(", \""+PARTICIPANTS+"\": [");
             for (Participant participant : participantsList) {
                 details.append(participant.toString() + ",");
             }
