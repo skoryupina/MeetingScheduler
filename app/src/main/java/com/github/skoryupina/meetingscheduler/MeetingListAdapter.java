@@ -39,6 +39,8 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingItem> {
         super(context,layoutResource,items);
         this.meetingItems = items;
         mContext = (MainActivity)context;
+        SwipeDetector.mContext = mContext;
+        SwipeDetector.meetingItemsAdapter=this;
     }
 
     @Override
