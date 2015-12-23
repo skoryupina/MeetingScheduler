@@ -495,6 +495,7 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
             break;
             case MeetingRestClientService.TASK_ADD_PARTICIPANT: {
                 i.putExtra(Meeting.ID, SwipeDetector.swipeID);
+                i.putExtra(Participant.FIO, mFIO);
                 i.putExtra(Participant.POSITION, mPost);
             }
             break;

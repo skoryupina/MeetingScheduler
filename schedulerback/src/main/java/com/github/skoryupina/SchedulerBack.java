@@ -234,17 +234,26 @@ public class SchedulerBack {
                                  @PathParam(Meeting.ID) String id,
                                  @PathParam(Participant.FIO) String fio,
                                  @PathParam(Participant.POSITION) String position) {
+        System.out.println("Add participant");
         if (LOGIN.equals(login) && PASSWORD.equals(password)) {
             try {
                 fio = URLDecoder.decode(fio, "UTF-8");
+                System.out.println("fio" + fio);
                 position = URLDecoder.decode(position, "UTF-8");
+                System.out.println("position" + position);
                 Participant participant = new Participant(fio, position);
+                System.out.println("participant" + participant.toString());
                 Meeting m = findMeetingById(Integer.parseInt(id));
                 if (m != null) {
                     meetings.remove(m);
+                    System.out.println("meeting id" + m.getID());
+                    System.out.println("m.getParticipantList" + m.getParticipantsList().toString());
                     ArrayList<Participant> participants = m.getParticipantsList();
-                    participants.add(participant);
+                    System.out.println("add " + m.getParticipantsList().toString());
+                    boolean res = participants.add(participant);
+                    System.out.println("added? " + res);
                     m.setParticipantsList(participants);
+                    System.out.println("setList " + m.getParticipantsList().toString());
                     meetings.add(m);
                 }
                 return RESULT_OK;

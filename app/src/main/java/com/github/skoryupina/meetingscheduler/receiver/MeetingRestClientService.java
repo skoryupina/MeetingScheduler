@@ -355,10 +355,6 @@ public class MeetingRestClientService extends IntentService {
             resultReceiver.send(RESULT_CODE, bundle);
         }
 
-
-
-
-
         protected boolean checkApp() {
             ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
             // get the info from the currently running task
