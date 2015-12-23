@@ -30,7 +30,6 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingItem> {
         TextView meetingName;
         TextView startDate;
         TextView endDate;
-        ImageView priorityIcon;
         //swipe delete layouts
         RelativeLayout listItem;
         LinearLayout mainView;
@@ -39,6 +38,7 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingItem> {
     public MeetingListAdapter(Context context, int layoutResource, ArrayList<MeetingItem> items) {
         super(context,layoutResource,items);
         this.meetingItems = items;
+        mContext = (MainActivity)context;
     }
 
     @Override
@@ -56,7 +56,6 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingItem> {
             meetingHolder.meetingName = (TextView) view.findViewById(R.id.meetingName);
             meetingHolder.startDate = (TextView) view.findViewById(R.id.startDate);
             meetingHolder.endDate = (TextView) view.findViewById(R.id.endDate);
-            meetingHolder.priorityIcon = (ImageView) view.findViewById(R.id.imagePriority);
             view.setTag(meetingHolder);
         } else meetingHolder = (MeetingViewHolder) view.getTag();
 
@@ -69,11 +68,11 @@ public class MeetingListAdapter extends ArrayAdapter<MeetingItem> {
 
             String a = meetingItem.getPriority();
             if (a.equals(Priority.URGENT.toString())) {
-                meetingHolder.priorityIcon.setImageResource(R.drawable.ic_urgent);
+                meetingHolder.meetingName.append(": " + a);
             } else if (a.equals(Priority.PLANNED.toString())) {
-                meetingHolder.priorityIcon.setImageResource(R.drawable.ic_planned);
+                meetingHolder.meetingName.append(": " + a);
             } else if (a.equals(Priority.OPTIONAL.toString())) {
-                meetingHolder.priorityIcon.setImageResource(R.drawable.ic_possible);
+                meetingHolder.meetingName.append(": " + a);
             }
         }
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) meetingHolder.mainView.getLayoutParams();

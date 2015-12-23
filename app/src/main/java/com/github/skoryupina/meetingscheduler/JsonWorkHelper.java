@@ -18,9 +18,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
-/**
- * Created by Ekaterina on 20.12.2015.
- */
 public class JsonWorkHelper {
     //for Debug
     private static final String TAG = " JsonWorkHelper";
@@ -93,13 +90,13 @@ public class JsonWorkHelper {
             JSONObject item = array.getJSONObject(0);
             String description = item.getString(Meeting.DESCRIPTION);
             if (description != null) {
-                detailedInformation += mContext.getString(R.string.app_description) + description;
+                detailedInformation += mContext.getString(R.string.meeting_description) + description;
             }
             if (item.has(Meeting.PARTICIPANTS)) {
                 JSONArray participants = item.getJSONArray(Meeting.PARTICIPANTS);
                 if (participants != null) {
                     String NEW_LINE = "\r\n";
-                    detailedInformation += NEW_LINE + mContext.getString(R.string.app_participants) + NEW_LINE;
+                    detailedInformation += NEW_LINE + mContext.getString(R.string.meeting_participants) + NEW_LINE;
                     for (int i = 0; i < participants.length(); i++) {
                         item = participants.getJSONObject(i);
                         detailedInformation += item.getString(Participant.FIO);

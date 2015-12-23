@@ -132,32 +132,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/priority"
-                    android:id="@+id/ptiorityTextView"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="false"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="6dp"
-                    android:paddingLeft="?android:attr/listPreferredItemPaddingLeft" />
-
                 <RadioGroup
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/ptiorityTextView"
                     android:id="@+id/radioPriority"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp">
+                    android:layout_centerInParent="true">
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/priority_urgent"
                         android:id="@+id/urgentRadio"
-
+                        android:textColor="#d00e10"
                         android:checked="true"
                         android:singleLine="false" />
 
@@ -166,14 +153,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/priority_planned"
                         android:id="@+id/routineRadio"
-
+                        android:textColor="#359439"
                         />
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/priority_optional"
-                        android:id="@+id/possibleRadio" />
+                        android:id="@+id/possibleRadio"
+                        android:textColor="#ffa913"/>
                 </RadioGroup>
 
             </RelativeLayout>

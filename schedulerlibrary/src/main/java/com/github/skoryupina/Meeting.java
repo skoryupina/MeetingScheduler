@@ -133,7 +133,7 @@ public class Meeting {
                 "\"name\":" + "\"" + name + "\"" +
                 ", \"startDate\":" + "\"" + startDate + "\"" +
                 ", \"endDate\":" + "\"" + endDate + "\"" +
-                ", \"priority\":\"" + priority.toString() + "\"}";
+                ", \"priority\":\"" + priority.toString() + "\"}\n\n";
     }
 
 

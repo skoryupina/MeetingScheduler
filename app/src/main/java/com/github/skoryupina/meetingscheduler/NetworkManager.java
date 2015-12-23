@@ -3,9 +3,6 @@ package com.github.skoryupina.meetingscheduler;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
-/**
- * Created by Ekaterina on 20.12.2015.
- */
 public class NetworkManager {
     public static Context mContext;
     public static boolean internetConnected() {

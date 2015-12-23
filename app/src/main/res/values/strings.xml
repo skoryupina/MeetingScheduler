@@ -8,6 +8,8 @@
     <string name="drawer_create_meeting">New meeting</string>
     <string name="drawer_settings">Settings</string>
 
+    <string name="not_logged_in">You\'re not logged in.</string>
+
 
     <!-- Drawer menu -->
     <string-array name="menu_items">
@@ -51,12 +53,14 @@
 
 
     <!--url for requests-->
-    <string name="url_request_meeting">http://192.168.43.18:8080/schedulerback/getTodayMeetings</string>
-    <string name="url_cancel_meeting">http://192.168.43.18:8080/schedulerback/cancelMeeting</string>
-    <string name="url_get_details">http://192.168.43.18:8080/schedulerback/getDescription</string>
-    <string name="url_add_participant">http://192.168.43.18:8080/schedulerback/addParticipant</string>
-    <string name="url_get_meeting_by_description">http://192.168.43.18:8080/schedulerback/getMeetingByDescription</string>
-    <string name="url_add_meeting">http://192.168.43.18:8080/schedulerback/androidCreateMeeting</string>
+
+    <!--http://192.168.43.18:-->
+    <string name="url_request_meeting">http://192.168.1.43:8080/schedulerback/getTodayMeetings</string>
+    <string name="url_cancel_meeting">http://192.168.1.43:8080/schedulerback/cancelMeeting</string>
+    <string name="url_get_details">http://192.168.1.43:8080/schedulerback/getDescription</string>
+    <string name="url_add_participant">http://192.168.1.43:8080/schedulerback/addParticipant</string>
+    <string name="url_get_meeting_by_description">http://192.168.1.43:8080/schedulerback/getMeetingByDescription</string>
+    <string name="url_add_meeting">http://192.168.1.43:8080/schedulerback/androidCreateMeeting</string>
 
     <!--Background Error-->
     <string name="intent_name">android.intent.action.MAIN</string>
@@ -100,7 +104,7 @@
 
     <string name="pref_category">Account settings</string>
 
-    <string name="participant_add_message">Участник добавлен</string>
+    <string name="participant_add_message">Participant added.</string>
     <string name="iconContentDescription">Icon for delete</string>
     <string name="iconListContent">Icon for list item</string>
     <string name="iconPriorityContent">Icon for priority</string>
@@ -117,8 +121,8 @@
 
     <string name="fio">FIO</string>
     <string name="position">Position</string>
-    <string name="participantText">Введите данные</string>
-    <string name="participantTitle">Стать участником</string>
+    <string name="participantText">Input data:</string>
+    <string name="participantTitle">Enroll</string>
     <string name="start_date_field">Start date:</string>
     <string name="end_date_field">End date.:</string>
     <string name="text_start_time">Start time:</string>

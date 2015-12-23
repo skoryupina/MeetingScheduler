@@ -43,6 +43,9 @@ public class SchedulerBack {
     public String getWelcomePage() {
         return "<html>" +
                 "<head>\n" +
+                "<script type=\"text/javascript\" language=\"JavaScript\">" +
+                "if (top.location != self.location) {" +
+                "top.location.href = self.location.href;} </script>" +
                 " <meta http-equiv=\"CONTENT-TYPE\" content=\"text/html; charset=UTF-8\"/>\n" +
                 " <title>Meetings server</title>\n" +
                 "</head>\n" +
@@ -52,7 +55,7 @@ public class SchedulerBack {
                 "<table>\n" +
                 "    <tr>\n" +
                 "      <td>Name</td>\n" +
-                "      <td><input type=\"text\" id=\"name\" required placeholder=\"Input name\" name=\"name\" size=\"80\"/></td>\n" +
+                "      <td><input type=\"text\" id=\"name\" required placeholder=\"Input name\" text=\"Example meeting\" name=\"name\" size=\"80\"/></td>\n" +
                 "    </tr>\n" +
                 "    <tr>\n" +
                 "      <td>Description</td>\n" +
@@ -74,7 +77,14 @@ public class SchedulerBack {
                 "<input type=\"reset\" value=\"CLEAR\" name=\"clear\"/>\n" +
                 "&nbsp;&nbsp;\n" +
                 "<input type=\"submit\" value=\"SAVE\" name=\"submit\"/>\n" +
-                "&nbsp;&nbsp;</form></body></html>";
+                "&nbsp;&nbsp;</form>" +
+                "<form action=\"createTestSet\" method=\"GET\">" +
+                "<input type=\"submit\" value=\"TEST SET\" name=\"submit\"/>\n" +
+                "&nbsp;&nbsp;</form>" +
+                "<form action=\"getMeetingsInfo\" method=\"GET\">" +
+                "<input type=\"submit\" value=\"GET MEETINGS INFO\" name=\"submit\"/>\n" +
+                "&nbsp;&nbsp;</form>"+
+                "</body></html>";
     }
 
     @GET
@@ -82,11 +92,55 @@ public class SchedulerBack {
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public String createMeeting(@QueryParam(Meeting.NAME) String name,
                                 @QueryParam(Meeting.DESCRIPTION) String description,
-                                @QueryParam(Meeting.STARTDATE) String begindate,
+                                @QueryParam(Meeting.STARTDATE) String startdate,
                                 @QueryParam(Meeting.ENDDATE) String enddate,
                                 @QueryParam(Meeting.PRIORITY) String priority
     ) {
-        addMeetingToList(name, description, begindate, enddate, priority);
+        addMeetingToList(name, description, startdate, enddate, priority);
+        return meetings.toString();
+    }
+
+    @GET
+    @Path("/createTestSet")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public String createTestSet() {
+        final Meeting meeting1 = new Meeting("First meeting",
+                "You should do everything properly",
+                "2015-12-23 22:00",
+                "2015-12-23 23:00",
+                "URGENT");
+        final Meeting meeting2 = new Meeting("Science conference",
+                "Report on diploma work",
+                "2015-12-23 21:00",
+                "2015-12-23 22:00",
+                "URGENT");
+        final Meeting meeting3 = new Meeting("Free program courses",
+                "Upgrade you skills",
+                "2015-12-23 19:00",
+                "2015-12-23 20:00",
+                "URGENT");
+        final Meeting meeting4 = new Meeting("Cooking master-class",
+                "Study how to make New Year sweets",
+                "2015-12-23 22:00",
+                "2015-12-23 23:00",
+                "PLANNED");
+        final Meeting meeting5 = new Meeting("DEADLINE LAB WORKS",
+                "Pass the last work on time",
+                "2015-12-26 10:00",
+                "2015-12-26 13:30",
+                "URGENT");
+        meetings.add(meeting1);
+        meetings.add(meeting2);
+        meetings.add(meeting3);
+        meetings.add(meeting4);
+        meetings.add(meeting5);
+        return meetings.toString();
+    }
+
+    @GET
+    @Path("/getMeetingsInfo")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+    public String getMeetingsInfo() {
         return meetings.toString();
     }
 
@@ -110,8 +164,14 @@ public class SchedulerBack {
             }
             Meeting meeting = new Meeting(name, description, startdate, enddate, priority);
             meetings.add(meeting);
-        } catch (UnsupportedEncodingException uee) {
-            uee.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addMeetingToList(ArrayList<Meeting> meetings) {
+        for (Meeting m : meetings) {
+            this.meetings.add(m);
         }
     }
 
@@ -129,7 +189,6 @@ public class SchedulerBack {
                 return EMPTY_LIST;
         } else
             return RESULT_ERROR;
-
     }
 
     private ArrayList<Meeting> getTodayMeetings() {
@@ -264,12 +323,12 @@ public class SchedulerBack {
             + Meeting.PRIORITY + "}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
     public String androidCreateMeeting(@PathParam(Meeting.NAME) String name,
-                              @PathParam(Meeting.DESCRIPTION ) String description,
-                              @PathParam(Meeting.STARTDATE ) String startdate,
-                              @PathParam(Meeting.ENDDATE) String enddate,
-                              @PathParam(Meeting.PRIORITY ) String priority,
-                              @PathParam(Participant.LOGIN) String login,
-                              @PathParam(Participant.PASSWORD) String password) {
+                                       @PathParam(Meeting.DESCRIPTION) String description,
+                                       @PathParam(Meeting.STARTDATE) String startdate,
+                                       @PathParam(Meeting.ENDDATE) String enddate,
+                                       @PathParam(Meeting.PRIORITY) String priority,
+                                       @PathParam(Participant.LOGIN) String login,
+                                       @PathParam(Participant.PASSWORD) String password) {
         if (LOGIN.equals(login) && PASSWORD.equals(password)) {
             addMeetingToList(name, description, startdate, enddate, priority);
             return RESULT_OK;

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/listitem"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:contentDescription="@string/iconContentDescription"
+            android:src="@android:drawable/ic_menu_delete" />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/mainview"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:background="#ffebeff1"
+        android:orientation="horizontal"
+
+        android:weightSum="1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
+            android:orientation="horizontal"
+            android:background="#E3F7F7">
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/list_item_icon"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentLeft="false"
+                android:contentDescription="@string/iconListContent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"></ImageView>
+
+            <TextView
+                android:id="@+id/meetingName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toRightOf="@+id/icon"
+                android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+                android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+                android:text="@string/meetingTextView"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:typeface="normal"
+                android:layout_above="@+id/icon"></TextView>
+
+            <TextView
+                android:id="@+id/startDate"
+                android:layout_width="fill_parent"
+                android:layout_height="25dp"
+                android:layout_below="@+id/meetingName"
+                android:layout_gravity="center_horizontal"
+                android:layout_toRightOf="@+id/textBeginDate"
+                android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+                android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+                android:text="@string/beginDateText"
+                android:textSize="12sp"
+                android:layout_marginLeft="20dp"
+                android:layout_alignParentEnd="false"></TextView>
+            <TextView
+                android:id="@+id/endDate"
+                android:layout_width="fill_parent"
+                android:layout_height="25dp"
+                android:layout_below="@+id/startDate"
+                android:layout_gravity="center_horizontal"
+                android:layout_toRightOf="@+id/textEndDate"
+                android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+                android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+                android:text="@string/endDateText"
+                android:textSize="12sp"
+                android:layout_marginLeft="20dp"
+                android:layout_alignParentEnd="false"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date_field"
+                android:id="@+id/textBeginDate"
+                android:layout_toRightOf="@+id/icon"
+                android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+                android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+                android:textSize="12sp"
+                android:layout_below="@+id/meetingName"
+                android:layout_above="@+id/endDate"
+                android:layout_marginLeft="20dp"
+                android:layout_alignParentEnd="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/end_date_field"
+                android:id="@+id/textEndDate"
+                android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+                android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+                android:textSize="12sp"
+                android:layout_toRightOf="@+id/icon"
+                android:layout_below="@+id/textBeginDate"
+                android:layout_marginLeft="20dp"
+                android:layout_alignParentEnd="false" />
+<!--TODO set priority text field-->
+           <!-- <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imagePriority"
+                android:src="@drawable/ic_urgent"
+                android:layout_centerVertical="true"
+                android:layout_alignRight="@+id/meetingName"
+                android:contentDescription="@string/iconPriorityContent"
+                android:paddingRight="?android:attr/listPreferredItemPaddingRight" />-->
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

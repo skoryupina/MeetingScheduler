@@ -56,32 +56,42 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
     private SharedPreferences preferences;
     private String login;
     private String password;
-    String lastName;
-    String firstName;
-    String patronymic;
-    String description;
-    String post;
-    String meetingName;
-    String beginDate;
-    String endDate;
-    String priority;
+    String mFIO;
+    String mDescription;
+    String mPost;
+    String mMeetingName;
+    String mStartDate;
+    String mEndDate;
+    String mPriority;
     ListView mListView;
     DownloadReceiver mReceiver;
     JSONArray array = null;
-    ArrayList<MeetingItem> transferList;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    int year = 2015;
-    int month = 10;
-    int day = 25;
-    int hour = 14;
-    int minute = 35;
-    TextView editStartDate;
-    TextView editEndDate;
-    TextView editStartTime;
-    TextView editEndTime;
+    ArrayList<MeetingItem> mAcceptedMeetingsList;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    /***
+     * Date and time pickers staff
+     */
+    int mYear = 2015;
+    int mMonth = 10;
+    int mDay = 25;
+    int mHour = 14;
+    int mMinute = 35;
+    TextView mTVStartDate;
+    TextView mTVEndDate;
+    TextView mTVStartTime;
+    TextView mTVEndTime;
+
+    /***
+     * Communication staff
+     */
     Intent i;
     private PendingIntent mPendingIntent;
     private BroadcastReceiver mBackgrounReceiver;
+
+    /***
+     * Alarm interval settings
+     */
     private static final int ALARM_INTERVAL = 60000;
 
     @Override
@@ -120,8 +130,8 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
         /***
          * swipe settings
          */
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         getOverflowMenu();
 
         /***
@@ -250,7 +260,7 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
             }
             break;
             case MeetingRestClientService.TASK_FIND_MEETING_BY_DESCRIPTION: {
-                swipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
                 setProgressBarIndeterminateVisibility(false);
                 switch (resultCode) {
                     case MeetingRestClientService.RESULT_OK:
@@ -354,17 +364,17 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
                 mListView.setAdapter(null);
                 mListView = (ListView) findViewById(R.id.meetingList);
                 mListView.setAdapter(null);
-                transferList = new ArrayList<MeetingItem>();
+                mAcceptedMeetingsList = new ArrayList<MeetingItem>();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject item = array.getJSONObject(i);
-                    transferList.add(new MeetingItem(
+                    mAcceptedMeetingsList.add(new MeetingItem(
                             item.getInt(Meeting.ID),
                             item.getString(Meeting.NAME),
                             item.getString(Meeting.STARTDATE),
                             item.getString(Meeting.ENDDATE),
                             item.getString(Meeting.PRIORITY)));
                 }
-                mListView.setAdapter(new MeetingListAdapter(this, R.layout.list_item, transferList));
+                mListView.setAdapter(new MeetingListAdapter(this, R.layout.list_item, mAcceptedMeetingsList));
 
             } catch (JSONException e) {
                 Log.e(TAG, "fillListView " + e.getMessage());
@@ -382,13 +392,13 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
      */
     private void fetchMeetings() {
         // showing refresh animation before making http call
-        swipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setRefreshing(true);
         if (!NetworkManager.internetConnected())
             Toast.makeText(MainActivity.this, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
         else {
             startSendService(MeetingRestClientService.TASK_REQUEST_MEETINGS);
         }
-        swipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void showAlert() {
@@ -410,7 +420,7 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
 
     private void enterDescription() {
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_participant)
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.desc_title)
                 .setMessage(R.string.input_descrip);
         final EditText input = new EditText(MainActivity.this);
@@ -423,12 +433,11 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                description = input.getText().toString().trim();
-                if (!description.equals("")) {
+                mDescription = input.getText().toString().trim();
+                if (!mDescription.equals("")) {
                     if (!NetworkManager.internetConnected())
                         Toast.makeText(MainActivity.this, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
                     else {
-                        //swipeRefreshLayout.setRefreshing(true);
                         startSendService(MeetingRestClientService.TASK_FIND_MEETING_BY_DESCRIPTION);
                     }
 
@@ -441,15 +450,8 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
     }
 
     private void showTextDialog(boolean isDecription, String message) {
-        Drawable icon = ContextCompat.getDrawable(getApplicationContext(), android.R.drawable.ic_dialog_info).mutate();
-        icon.setColorFilter(new ColorMatrixColorFilter(new float[]{
-                0.5f, 0, 0, 0, 0,
-                0, 0.5f, 0, 0, 0,
-                0, 0, 0, 0.5f, 0,
-                0, 0, 0, 1, 0,
-        }));
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setCancelable(false).setIcon(icon)
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setCancelable(false)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                     @Override
@@ -469,7 +471,6 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
     }
 
     private void getOverflowMenu() {
-
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
             Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
@@ -494,21 +495,20 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
             break;
             case MeetingRestClientService.TASK_ADD_PARTICIPANT: {
                 i.putExtra(Meeting.ID, SwipeDetector.swipeID);
-                i.putExtra(Participant.FIO, lastName);
-                i.putExtra(Participant.POSITION, post);
+                i.putExtra(Participant.POSITION, mPost);
             }
             break;
             case MeetingRestClientService.TASK_FIND_MEETING_BY_DESCRIPTION: {
                 setProgressBarIndeterminateVisibility(true);
-                i.putExtra(Meeting.DESCRIPTION, description);
+                i.putExtra(Meeting.DESCRIPTION, mDescription);
             }
             break;
             case MeetingRestClientService.TASK_ADD_MEETING: {
-                i.putExtra(Meeting.DESCRIPTION, description);
-                i.putExtra(Meeting.NAME, meetingName);
-                i.putExtra(Meeting.STARTDATE, beginDate);
-                i.putExtra(Meeting.ENDDATE, endDate);
-                i.putExtra(Meeting.PRIORITY, priority);
+                i.putExtra(Meeting.DESCRIPTION, mDescription);
+                i.putExtra(Meeting.NAME, mMeetingName);
+                i.putExtra(Meeting.STARTDATE, mStartDate);
+                i.putExtra(Meeting.ENDDATE, mEndDate);
+                i.putExtra(Meeting.PRIORITY, mPriority);
             }
             break;
         }
@@ -527,7 +527,6 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
         final AlertDialog.Builder partDialog = new AlertDialog.Builder(this);
         partDialog.setView(participantDialogView)
                 .setTitle(R.string.participantTitle)
-                .setIcon(R.drawable.ic_participant)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -538,13 +537,9 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditText fn = (EditText) participantDialogView.findViewById(R.id.nameText);
-                        EditText ln = (EditText) participantDialogView.findViewById(R.id.lastNameText);
-                        EditText patr = (EditText) participantDialogView.findViewById(R.id.patronymicText);
                         EditText pos = (EditText) participantDialogView.findViewById(R.id.postText);
-                        lastName = ln.getText().toString().trim();
-                        firstName = fn.getText().toString().trim();
-                        patronymic = patr.getText().toString().trim();
-                        post = pos.getText().toString().trim();
+                        mFIO = fn.getText().toString().trim();
+                        mPost = pos.getText().toString().trim();
                         if (NetworkManager.internetConnected())
                             startSendService(MeetingRestClientService.TASK_ADD_PARTICIPANT);
                         else
@@ -561,29 +556,29 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
         final View meetingDialogView = factory.inflate(
                 R.layout.new_meeting_dialog, null);
         final AlertDialog.Builder newMeetingDialog = new AlertDialog.Builder(this);
-        editStartDate = (TextView) meetingDialogView.findViewById(R.id.startDatePickerText);
-        editEndDate = (TextView) meetingDialogView.findViewById(R.id.endDatePickerText);
-        editStartTime = (TextView) meetingDialogView.findViewById(R.id.beginTimeText);
-        editEndTime = (TextView) meetingDialogView.findViewById(R.id.endTimeText);
-        editStartDate.setOnClickListener(new View.OnClickListener() {
+        mTVStartDate = (TextView) meetingDialogView.findViewById(R.id.startDatePickerText);
+        mTVEndDate = (TextView) meetingDialogView.findViewById(R.id.endDatePickerText);
+        mTVStartTime = (TextView) meetingDialogView.findViewById(R.id.beginTimeText);
+        mTVEndTime = (TextView) meetingDialogView.findViewById(R.id.endTimeText);
+        mTVStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDataPicker(myCallBack);
             }
         });
-        editEndDate.setOnClickListener(new View.OnClickListener() {
+        mTVEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDataPicker(myCallBackEnd);
             }
         });
-        editStartTime.setOnClickListener(new View.OnClickListener() {
+        mTVStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTimePicker(myTimeBeginCall);
             }
         });
-        editEndTime.setOnClickListener(new View.OnClickListener() {
+        mTVEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showTimePicker(myTimeEndCall);
@@ -609,11 +604,11 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
                         TextView etEndDate = (TextView) meetingDialogView.findViewById(R.id.endDatePickerText);
                         TextView etEndTime = (TextView) meetingDialogView.findViewById(R.id.endTimeText);
 
-                        meetingName = mn.getText().toString().trim();
-                        description = dn.getText().toString().trim();
-                        beginDate = etStartDate.getText().toString().trim() + " " + etStartTime.getText().toString().trim();
-                        endDate = etEndDate.getText().toString().trim() + " " + etEndTime.getText().toString().trim();
-                        priority = check.getText().toString().trim();
+                        mMeetingName = mn.getText().toString().trim();
+                        mDescription = dn.getText().toString().trim();
+                        mStartDate = etStartDate.getText().toString().trim() + " " + etStartTime.getText().toString().trim();
+                        mEndDate = etEndDate.getText().toString().trim() + " " + etEndTime.getText().toString().trim();
+                        mPriority = check.getText().toString().trim();
                         if (NetworkManager.internetConnected())
                             startSendService(MeetingRestClientService.TASK_ADD_MEETING);
                         else
@@ -625,7 +620,7 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
     }
 
     private void showDataPicker(DatePickerDialog.OnDateSetListener myCallBack) {
-        DatePickerDialog tpd = new DatePickerDialog(this, myCallBack, year, month, day);
+        DatePickerDialog tpd = new DatePickerDialog(this, myCallBack, mYear, mMonth, mDay);
         tpd.show();
     }
 
@@ -633,10 +628,10 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            MainActivity.this.year = year;
-            month = monthOfYear;
-            day = dayOfMonth;
-            editStartDate.setText(MainActivity.this.year + "-" + (month + 1) + "-" + day);
+            MainActivity.this.mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            mTVStartDate.setText(MainActivity.this.mYear + "-" + (mMonth + 1) + "-" + mDay);
         }
     };
 
@@ -644,31 +639,31 @@ public class MainActivity extends ActionBarActivity implements DownloadReceiver.
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
-            MainActivity.this.year = year;
-            month = monthOfYear;
-            day = dayOfMonth;
-            editEndDate.setText(MainActivity.this.year + "-" + (month + 1) + "-" + day);
+            MainActivity.this.mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            mTVEndDate.setText(MainActivity.this.mYear + "-" + (mMonth + 1) + "-" + mDay);
         }
     };
 
     private void showTimePicker(TimePickerDialog.OnTimeSetListener myCallBack) {
-        TimePickerDialog tpd = new TimePickerDialog(this, myCallBack, hour, minute, true);
+        TimePickerDialog tpd = new TimePickerDialog(this, myCallBack, mHour, mMinute, true);
         tpd.show();
     }
 
     TimePickerDialog.OnTimeSetListener myTimeBeginCall = new TimePickerDialog.OnTimeSetListener() {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            hour = hourOfDay;
-            MainActivity.this.minute = minute;
-            editStartTime.setText(hour + ":" + MainActivity.this.minute);
+            mHour = hourOfDay;
+            MainActivity.this.mMinute = minute;
+            mTVStartTime.setText(mHour + ":" + MainActivity.this.mMinute);
         }
     };
 
     TimePickerDialog.OnTimeSetListener myTimeEndCall = new TimePickerDialog.OnTimeSetListener() {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            hour = hourOfDay;
-            MainActivity.this.minute = minute;
-            editEndTime.setText(hour + ":" + MainActivity.this.minute);
+            mHour = hourOfDay;
+            MainActivity.this.mMinute = minute;
+            mTVEndTime.setText(mHour + ":" + MainActivity.this.mMinute);
         }
     };
 

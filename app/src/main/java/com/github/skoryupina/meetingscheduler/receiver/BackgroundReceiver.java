@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.github.skoryupina.Participant;
+import com.github.skoryupina.meetingscheduler.R;
 
 public class BackgroundReceiver extends BroadcastReceiver {
-    public static final String PREFERENCES = BackgroundReceiver.class.getPackage().getName() + "_preferences";
 
     public void onReceive(Context context, Intent intent) {
         Intent i = new Intent(context, MeetingRestClientService.class);
-        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.shared_preferenced_name), Context.MODE_PRIVATE);
         if (preferences != null) {
             if (preferences.contains(Participant.LOGIN) && preferences.contains(Participant.PASSWORD)) {
                 String login = preferences.getString(Participant.LOGIN, "");
