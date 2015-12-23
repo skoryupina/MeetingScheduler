@@ -18,9 +18,11 @@ import javax.ws.rs.*;
 import javax.ejb.Stateless;
 
 
+
 @Stateless
 @Path("/")
 public class SchedulerBack {
+    private static final String TAG = "SchedulerBack";
     @Context
     private ServletContext context;
     @Context
@@ -273,13 +275,18 @@ public class SchedulerBack {
                                  @QueryParam(Participant.PASSWORD) String password,
                                  @QueryParam(Meeting.ID) String id) {
         String description;
+        System.out.println("Get description");
         if (LOGIN.equals(login) && PASSWORD.equals(password)) {
             try {
+                System.out.println("Find id");
                 Meeting meeting = findMeetingById(Integer.parseInt(id));
                 if (meeting != null) {
+                    System.out.println("Found");
                     description = meeting.getDetails();
-                } else
+                } else {
                     description = EMPTY_LIST;
+                    System.out.println("Not Found");
+                }
                 return description;
             } catch (Exception e) {
                 e.printStackTrace();

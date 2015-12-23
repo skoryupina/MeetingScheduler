@@ -11,12 +11,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
 
+import com.github.skoryupina.Participant;
+
 public class PinDialog extends DialogPreference {
-    private EditText username;
+    private EditText login;
     private EditText password;
-    public static final String APP_PREFERENCES_NAME = "login"; // имя пользователя
-    public static final String APP_PREFERENCES_PASSWORD = "password"; // пароль
-    private final String DEFAULT_VALUE = "Вход не произведен";
     private int selectedValue;
 
     String mValue;
@@ -35,9 +34,9 @@ public class PinDialog extends DialogPreference {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences preferences = getPreferenceManager().getSharedPreferences();
                 selectedValue = which;
-                mValue= username.getText().toString();
-                preferences.edit().putString(APP_PREFERENCES_PASSWORD, password.getText().toString()).commit();
-                preferences.edit().putString(APP_PREFERENCES_NAME, username.getText().toString()).commit();
+                mValue= login.getText().toString();
+                preferences.edit().putString(Participant.PASSWORD, password.getText().toString()).commit();
+                preferences.edit().putString(Participant.LOGIN, login.getText().toString()).commit();
             }
         });
         builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -51,7 +50,7 @@ public class PinDialog extends DialogPreference {
 
     @Override
     public void onBindDialogView(@NonNull View view){
-        username = (EditText)view.findViewById(R.id.userText);
+        login = (EditText)view.findViewById(R.id.userText);
         password = (EditText) view.findViewById(R.id.passwordText);
         super.onBindDialogView(view);
 
@@ -62,7 +61,7 @@ public class PinDialog extends DialogPreference {
         super.onDialogClosed(positiveResult);
         if(selectedValue==DialogInterface.BUTTON_POSITIVE)
         {
-            String user = username.getText().toString();
+            String user = login.getText().toString();
             if(!user.equals("")) {
                 setSummary(user);
                 persistString(mValue);
@@ -80,7 +79,7 @@ public class PinDialog extends DialogPreference {
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         if (restorePersistedValue) {
-            mValue = getPersistedString(DEFAULT_VALUE);
+            mValue = getPersistedString(getContext().getString(R.string.not_logged_in));
         }
         else {
             mValue = (String) defaultValue;

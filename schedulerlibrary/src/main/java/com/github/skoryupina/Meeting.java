@@ -138,7 +138,7 @@ public class Meeting {
 
 
     public String getDetails() {
-        StringBuilder details = new StringBuilder("{" + "\""+DESCRIPTION+"\":\"" + description + "\"");
+        StringBuilder details = new StringBuilder("[{" + "\""+DESCRIPTION+"\":\"" + description + "\"");
         if (participantsList.size() > 0) {
             details.append(", \""+PARTICIPANTS+"\": [");
             for (Participant participant : participantsList) {
@@ -147,7 +147,7 @@ public class Meeting {
             details.deleteCharAt(details.length() - 1);
             details.append("]");
         }
-        details.append("}");
+        details.append("}]");
         return details.toString();
     }
 }

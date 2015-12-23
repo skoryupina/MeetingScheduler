@@ -20,7 +20,7 @@ import java.nio.charset.Charset;
 
 public class JsonWorkHelper {
     //for Debug
-    private static final String TAG = " JsonWorkHelper";
+    private static final String TAG = "JsonWorkHelper";
     public static Context mContext;
     public static final String MEETINGS_FILE_NAME = "meetings.json";
 
@@ -57,6 +57,7 @@ public class JsonWorkHelper {
 
         } else {
             File jFile = new File(mContext.getFilesDir(), MEETINGS_FILE_NAME);
+            System.out.println("in readJsonObject ------");
             return new JSONArray();
         }
     }
@@ -74,9 +75,10 @@ public class JsonWorkHelper {
                 if (outputStream != null) {
                     try {
                         outputStream.close();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         Log.e(TAG, "writeJsonObject " + e.getMessage());
+                        System.out.println("writeJsonObject ERROR");
                     }
                 }
             }
@@ -86,14 +88,19 @@ public class JsonWorkHelper {
     public static String parseDescription(String result) {
         String detailedInformation = "";
         try {
+            System.out.println("In parseDescription");
+            System.out.println("In  result"+  result);
             JSONArray array = new JSONArray(result);
+            System.out.println("In  array"+  array);
             JSONObject item = array.getJSONObject(0);
             String description = item.getString(Meeting.DESCRIPTION);
             if (description != null) {
-                detailedInformation += mContext.getString(R.string.meeting_description) + description;
+                detailedInformation += description;
             }
             if (item.has(Meeting.PARTICIPANTS)) {
+                System.out.println("In participans");
                 JSONArray participants = item.getJSONArray(Meeting.PARTICIPANTS);
+                System.out.println("JSONArray participants " + participants.toString());
                 if (participants != null) {
                     String NEW_LINE = "\r\n";
                     detailedInformation += NEW_LINE + mContext.getString(R.string.meeting_participants) + NEW_LINE;
@@ -106,6 +113,7 @@ public class JsonWorkHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, "onReceiveResult " + e.getMessage());
+            System.out.println("parseDescription ERROR");
         }
         return detailedInformation;
     }
